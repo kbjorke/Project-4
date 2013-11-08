@@ -23,24 +23,28 @@ int main(int argc, char *argv[])
 
     // Loop over commandline arguments to find parameters and options:
     for( i = 0; i < argc-1; i++ ){
-        if((string(argv[i]).find("-method")!=string::npos)){
+        if( strcmp(argv[i], "-method") == 0 ){
             method = argv[i+1];
         }
-        if((string(argv[i]).find("-T")!=string::npos)){
+        if( strcmp(argv[i], "-T") == 0 ){
             T = atof(argv[i+1]);
         }
-        if((string(argv[i]).find("-dt")!=string::npos)){
-            delta_t = atof(argv[i+1]);
+        if( strcmp(argv[i], "-n") == 0 ){
+            n = atoi(argv[i+1]);
         }
-        if((string(argv[i]).find("-dx")!=string::npos)){
-            delta_x = atof(argv[i+1]);
+        if( strcmp(argv[i], "-m") == 0 ){
+            m = atoi(argv[i+1]);
         }
     }
 
-    n = ceil(d/delta_x);
-    m = ceil(T/delta_t);
+    delta_x = d/n;
+    delta_t = T/m;
+    //n = ceil(d/delta_x);
+    //m = ceil(T/delta_t);
 
     alpha = delta_t/(delta_x*delta_x);
+
+    cout << alpha << endl;
 
     // Problem definition, should be able to give as input, as function or
     // through input file.
