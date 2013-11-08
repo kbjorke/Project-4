@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <cmath>
 
 
@@ -27,19 +29,24 @@ void solve_tridiagonal_matrix_eq(int n, double *d, double *e,
 
     int i;
 
+    double d_[n];
+    for( i = 0; i < n; i++ ){
+        d_[i] = d[i];
+    }
+
     // Forward substitution:
     for( i = 1; i < n; i++ ){
-        d[i] -= e[i-1]*e[i-1]/d[i-1];
-        b[i] += b[i-1]*e[i-1]/d[i-1];
+        d_[i] -= e[i-1]*e[i-1]/d_[i-1];
+        b[i] -= b[i-1]*e[i-1]/d_[i-1];
     }
 
     // Backward substitution:
-    for( i = n-2; i > 0; i-- ){
-        b[i] -= b[i-1]*e[i]/d[i+1];
+    for( i = n-2; i >= 0; i-- ){
+        b[i] -= b[i+1]*e[i]/d_[i+1];
     }
 
     // Find solution:
     for( i = 0; i < n; i++ ){
-        x[i] = b[i]/d[i];
+        x[i] = b[i]/d_[i];
     }
 }
