@@ -29,18 +29,16 @@ int main(int argc, char *argv[])
         if( strcmp(argv[i], "-T") == 0 ){
             T = atof(argv[i+1]);
         }
-        if( strcmp(argv[i], "-n") == 0 ){
-            n = atoi(argv[i+1]);
+        if( strcmp(argv[i], "-dx") == 0 ){
+            delta_x = atof(argv[i+1]);
         }
-        if( strcmp(argv[i], "-m") == 0 ){
-            m = atoi(argv[i+1]);
+        if( strcmp(argv[i], "-dt") == 0 ){
+            delta_t = atof(argv[i+1]);
         }
     }
 
-    delta_x = d/n;
-    delta_t = T/m;
-    //n = ceil(d/delta_x);
-    //m = ceil(T/delta_t);
+    n = ceil(d/delta_x);
+    m = ceil(T/delta_t);
 
     alpha = delta_t/(delta_x*delta_x);
 
