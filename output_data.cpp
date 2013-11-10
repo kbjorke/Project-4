@@ -14,7 +14,8 @@ void output(int n, int m, double T, double d,
     ostringstream oss;
 
     oss << "data_" << method  << "_n" <<
-           n << "_T" << int(T) << "_alpha" <<
+           n << "_T" <<
+           setw(3) << setfill('0') << int(T*100) << "_alpha" <<
            setw(5) << setfill('0') << int(alpha*10000) <<
            ".txt" << '\0' << endl;
 
