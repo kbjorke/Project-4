@@ -1,8 +1,5 @@
 #include <iostream>
 
-#include <cmath>
-
-
 void solve_tridiagonal_matrix_eq(int n, double *d, double *e,
                                           double *x, double *b)
 {
@@ -29,6 +26,8 @@ void solve_tridiagonal_matrix_eq(int n, double *d, double *e,
 
     int i;
 
+    // Create dummy array for d, to avoid the values in the d array
+    // to be overwritten during function calls.
     double d_[n];
     for( i = 0; i < n; i++ ){
         d_[i] = d[i];

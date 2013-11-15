@@ -1,12 +1,13 @@
 """
-Python script to plot the data we get from the output_files produced
-by the program Project 3.
+Python script to plot the solution, the corresponding analytical
+solution, the error, and the error at t1 and t2, based on a 
+solution of a specific case computed by the program Project4.
 
-Pass the name of the output_file you want to plot as a 
-commandline argumen.
+Pass the name of the output file you want to plot as a 
+commandline argument.
 
 Usage:
-~$ python plot_system.pu output_EarthSunSystem.txt
+~$ python plot_solution.py data_crank_nicolson_n11_T100_alpha05000.txt
 """
 import sys
 import numpy as np
@@ -18,7 +19,7 @@ filename = sys.argv[-1]
 
 input_file = open(filename, 'r')
 
-# Starts with i = -2 because the two first lines
+# Starts with i = -1 because the two first lines
 # of the outputfile contains only general information about the problem.
 i = -1
 for line in input_file:
@@ -44,7 +45,7 @@ for line in input_file:
         solution = np.zeros([n, m])
         
     if ( i >= 0 ):
-        # Reads values of the simulation
+        # Reads values of the solution
         solution[:,i] = [float(value) for value in column]
 
     i += 1
@@ -55,11 +56,9 @@ input_file.close()
 # Find analytic solution: 
 v = 0
 
-epsilon = 1e-2
-
 An = 1
 n_ = 1
-while np.abs(An) > epsilon:
+while n_ <= 30:
     An = -2.0/(n_*np.pi*d)
     term = An*np.sin(n_*np.pi*x/d)*np.exp(-n_**2*np.pi**2*t/d**2) 
     v += term
@@ -67,17 +66,23 @@ while np.abs(An) > epsilon:
 
 u = v + 1 - x
 
-
+# Times t1, when the solution is curved, and t2 when the 
+# solution is almost in the stady state.
 t1 = 0.1
 t2 = 0.8
 
+# Finds index corresponding to the times t1 and t2
 i_t1 = int(round(t1/dt))
 i_t2 = int(round(t2/dt))
 
+
 resolution = 20.0
 
+# Variables used in 3d plot, decides how many points are to
+# be include of the columns and rows:
 c_step = int(np.ceil(m/resolution))
 r_step = int(np.ceil(n/resolution))
+
 
 # Plot 3d plot of solution
 fig1 = plt.figure(1)
@@ -117,17 +122,17 @@ fig3.colorbar(surf3)
 
 # Plot error at t1:
 plt.figure(4)
-plt.plot(position, np.abs(u[:,i_t1]-solution[:,i_t1])/
-        (np.abs(u[:,i_t1])))
+plt.plot(position, np.log10(np.abs(u[:,i_t1]-solution[:,i_t1])))
+# Commented out alternative used to plot Figure 8 in rapport to Project 4
+#plt.plot(position, u[:,i_t1]-solution[:,i_t1])
 plt.xlabel('x-position')
-plt.ylabel('relative error')
+plt.ylabel('error')
 
 # Plot error at t2:
 plt.figure(5)
-plt.plot(position, np.abs(u[:,i_t2]-solution[:,i_t2])/
-        (np.abs(u[:,i_t2])))
+plt.plot(position, np.log10(np.abs(u[:,i_t2]-solution[:,i_t2])))
 plt.xlabel('x-position')
-plt.ylabel('relative error')
+plt.ylabel('error')
 
 plt.show()
 
